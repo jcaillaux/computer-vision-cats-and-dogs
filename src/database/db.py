@@ -13,18 +13,22 @@ db_url = URL.create(
     database=PG_CONFIG["database"],
 )
 
-def create_tables():
+def make_engine():
     global db_url
     if db_url:
-        engine = create_engine(db_url, echo=True)
-        SQLModel.metadata.create_all(engine)
+        return create_engine(db_url, echo=True)
+    return None
+
+
+def create_tables():
+    engine = make_engine()
+    SQLModel.metadata.create_all(engine)
 
 def drop_tables():
-    global db_url
-    if db_url:
-        engine = create_engine(db_url, echo=True)
-        SQLModel.metadata.drop_all(engine)
+    engine = make_engine()
+    SQLModel.metadata.drop_all(engine)
+
 
 if __name__ == "__main__":
-    #create_tables()
-    drop_tables()
+    create_tables()
+    #drop_tables()
