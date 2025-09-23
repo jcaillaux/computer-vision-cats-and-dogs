@@ -15,4 +15,9 @@ activate:
 clear :
 	rm -rf $(VENV)
 
+db-up:
+	docker compose --file docker/docker-compose.yml --env-file .env up -d
+db-down:
+	docker compose --file docker/docker-compose.yml --env-file .env down
+
 
