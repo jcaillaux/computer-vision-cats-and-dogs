@@ -56,6 +56,17 @@
 
 {% block scripts %}
 <script>
+
+const feedback = (grade) =>{
+    alert(grade);
+    feedback_callback();
+}
+
+const feedback_callback = () =>{
+    const div_feedback = document.getElementById('feedback');
+    div_feedback.remove();
+}
+
 document.getElementById('imageFile').addEventListener('change', function(e) {
     const file = e.target.files[0];
     if (file) {
@@ -125,6 +136,16 @@ document.getElementById('predictionForm').addEventListener('submit', async funct
                             🐶 Chien: ${data.probabilities.dog}
                         </div>
                     </div>
+                    <div id="feedback">
+                        <p>Noter la réponse : 
+                            <button class="icon-button" onclick="feedback('like')">
+                                <img src="{{ url_for('assets', path='icons/like-button-icon.svg') }}"> 
+                            </button>
+                            <button class="icon-button" onclick="feedback('dislike')">
+                                <img src="{{ url_for('assets', path='icons/dislike-button-icon.svg') }}">
+                            </button>
+                        </p>
+                    </div>
                 </div>
             `;
         } else {
@@ -152,4 +173,17 @@ document.getElementById('predictionForm').addEventListener('submit', async funct
     predictBtn.disabled = false;
 });
 </script>
+<style>
+    .icon-button {
+    background: transparent;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 5%;
+}
+</style>
+
 {% endblock %}
