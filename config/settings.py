@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Chemins de base
 ROOT_DIR = Path(__file__).parent.parent
@@ -30,6 +33,15 @@ API_CONFIG = {
     "port": 8000,
     "token": os.environ.get("API_TOKEN", "?C@TS&D0GS!"),
     "model_path": MODELS_DIR / "cats_dogs_model.keras",
+}
+
+# Configuration PostgreSQL
+PG_CONFIG = {
+    "user":     os.environ.get("POSTGRES_USER"),
+    "password": os.environ.get("POSTGRES_PASS"),
+    "host":     os.environ.get("POSTGRES_HOST", "localhost"),
+    "port":     os.environ.get("POSTGRES_PORT", "5432"),
+    "database": os.environ.get("POSTGRES_DBNM"),
 }
 
 # URLs de données
