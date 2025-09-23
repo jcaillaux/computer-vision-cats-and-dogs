@@ -21,3 +21,5 @@ numpy
 httpx
 requests
 python-dotenv
+sqlmodel
+psycopg2-binary
