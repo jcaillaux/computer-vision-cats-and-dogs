@@ -22,3 +22,8 @@ app.include_router(router)
 STATIC_DIR = ROOT_DIR / "src" / "web" / "static"
 if STATIC_DIR.exists():
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+ASSETS_DIR = ROOT_DIR / "src" / "web" / "assets"
+if ASSETS_DIR.exists():
+    print("\n\nAssets directory found, mounting...")
+    app.mount("/assets", StaticFiles(directory=str(ASSETS_DIR)), name="assets")
