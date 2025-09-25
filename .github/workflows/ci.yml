@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  pull_request:
+  push:
     branches: [ main ]
 
 jobs:
@@ -40,7 +40,7 @@ jobs:
     - name: Start API and test
       run: |
         python scripts/run_api.py &
-        sleep 10
+        sleep 25
         #python tests/test_api_simple.py
         pytest
     - name : Stop PostgreSQL
