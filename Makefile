@@ -27,3 +27,11 @@ create-tables:
 drop-tables:
 	$(PYTHON) -m scripts.drop_tables
 
+test :
+	$(PYTHON) -m pytest
+	$(PYTHON) -m scripts.drop_tables
+
+start :
+	$(PYTHON) -m scripts.run_api
+
+
