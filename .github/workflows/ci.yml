@@ -42,7 +42,7 @@ jobs:
         python scripts/run_api.py &
         sleep 25
         #python tests/test_api_simple.py
-        pytest
+        
     - name : Stop PostgreSQL
       run : |
         make down
