@@ -1,12 +1,30 @@
 services:
+  grafana:
+    image: grafana/grafana:main
+    container_name: grafana
+    ports:
+      - "${GRAFANA_PORT}:3000"
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      # Pass env vars to container
+      - POSTGRES_DBNM=${POSTGRES_DBNM}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASS=${POSTGRES_PASS}
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    networks:
+      - postgres_network
+    # Add this entrypoint to substitute variables
+
   postgres:
     image: postgres:17-alpine
     container_name: postgresql_db
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_DB: ${POSTGRES_DBNM}
       POSTGRES_USER: ${POSTGRES_USER}
-      PROSTGRES_PASSWOD: ${POSTGRES_PASSWORD}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
       PGDATA: /var/lib/postgresql/data/pgdata
     ports:
       - "${POSTGRES_PORT}:5432"
@@ -21,6 +39,8 @@ services:
       retries: 5
 
 volumes:
+  grafana-data:
+    driver: local
   postgres_data:
     driver: local
 
