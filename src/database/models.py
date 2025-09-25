@@ -8,7 +8,7 @@ def get_utc_timestamp():
     return datetime.now(timezone.utc).replace(tzinfo=None)
 
 class Feedback(SQLModel, table=True):
-    uuid: str = Field(default_factory= lambda: str(uuid.uuid4()), primary_key=True)
+    uuid: str = Field(foreign_key="predictionlog.uuid", primary_key=True)
     timestamp: datetime = Field(default_factory=get_utc_timestamp)
     grade: str
 
@@ -28,4 +28,4 @@ class PredictionLog(SQLModel, table=True):
     inference_time_ms : float = Field(nullable=False)
     success : bool = Field(nullable=False)
     model_version : str = Field(default=MODEL_CONFIG["version"])
-    image_id: str = Field(nullable=False)
+    image_id: str = Field(foreign_key="imagemetadata.hash", nullable=False)

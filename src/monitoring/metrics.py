@@ -9,14 +9,6 @@ from src.utils.image import analyze_image_content
 from src.utils.task_id import generate_task_id
 from src.database.db import insert_image_metadata, insert_prediction, insert_feedback
 
-# Ajouter le répertoire racine au path
-ROOT_DIR = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(ROOT_DIR))
-
-from config.settings import ROOT_DIR, PROCESSED_DATA_DIR
-
-# Fichier CSV pour stocker les métriques
-MONITORING_FILE = PROCESSED_DATA_DIR / "monitoring_inference.csv"
 
 def log_metrics(func):
     @wraps(func)
