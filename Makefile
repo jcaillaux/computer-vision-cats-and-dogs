@@ -11,13 +11,27 @@ env:
 activate:
 	@echo "Run: source $(VENV)/bin/activate"
 	
-
 clear :
 	rm -rf $(VENV)
 
-db-up:
+up:
+	@echo "Starting Docker containers..."
 	docker compose --file docker/docker-compose.yml --env-file .env up -d
-db-down:
+down:
+	@echo "Stopping Docker containers..."
 	docker compose --file docker/docker-compose.yml --env-file .env down
+
+create-tables:
+	$(PYTHON) -m scripts.create_tables
+
+drop-tables:
+	$(PYTHON) -m scripts.drop_tables
+
+test :
+	$(PYTHON) -m pytest
+	$(PYTHON) -m scripts.drop_tables
+
+start :
+	$(PYTHON) -m scripts.run_api
 
 

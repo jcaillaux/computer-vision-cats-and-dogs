@@ -1,7 +1,7 @@
 name: CI
 
 on:
-  push:
+  pull_request:
     branches: [ main ]
 
 jobs:
@@ -26,8 +26,16 @@ jobs:
         mkdir -p data/processed/models
         touch data/processed/models/cats_dogs_model.keras
     
+    - name : Setup PostgreSQL
+      run : |
+        make up
+    
     - name: Start API and test
       run: |
         python scripts/run_api.py &
         sleep 10
-        python tests/test_api_simple.py
+        #python tests/test_api_simple.py
+        pytest
+    - name : Stop PostgreSQL
+      run : |
+        make down
