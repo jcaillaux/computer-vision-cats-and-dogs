@@ -10,7 +10,7 @@ def get_utc_timestamp():
 class Feedback(SQLModel, table=True):
     uuid: str = Field(foreign_key="predictionlog.uuid", primary_key=True)
     timestamp: datetime = Field(default_factory=get_utc_timestamp)
-    grade: str
+    grade: int
 
 class ImageMetadata(SQLModel, table=True):
     hash: str = Field(primary_key=True)
