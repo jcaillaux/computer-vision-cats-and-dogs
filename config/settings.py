@@ -1,5 +1,8 @@
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Chemins de base
 ROOT_DIR = Path(__file__).parent.parent
@@ -18,6 +21,7 @@ TEMP_DIR = Path(os.environ.get("TEMP_DIR", "/tmp/cats_dogs"))
 
 # Configuration du modèle
 MODEL_CONFIG = {
+    "version": "1.0.0",
     "image_size": (128, 128), # Optimized for speed-up
     "batch_size": 64,
     "epochs": 3, #10, # Optimized for speed-up
@@ -30,6 +34,15 @@ API_CONFIG = {
     "port": 8000,
     "token": os.environ.get("API_TOKEN", "?C@TS&D0GS!"),
     "model_path": MODELS_DIR / "cats_dogs_model.keras",
+}
+
+# Configuration PostgreSQL
+PG_CONFIG = {
+    "user":     os.environ.get("POSTGRES_USER"),
+    "password": os.environ.get("POSTGRES_PASS"),
+    "host":     os.environ.get("POSTGRES_HOST", "localhost"),
+    "port":     os.environ.get("POSTGRES_PORT", "5432"),
+    "database": os.environ.get("POSTGRES_DBNM"),
 }
 
 # URLs de données
