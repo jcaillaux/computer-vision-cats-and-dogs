@@ -70,6 +70,10 @@ project-name/
 make env           # Installer les dépendances dans un environnement virtuel
 ```
 
+```bash
+make up           # Initialisation des conteneurs Postgres et Grafana
+```
+
 ## 🎯 API
 
 Lorsque l'environnement virtuel est activé, vous pouvez lancer le serveur de l'API ...
