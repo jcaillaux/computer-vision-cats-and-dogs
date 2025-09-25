@@ -21,6 +21,7 @@ TEMP_DIR = Path(os.environ.get("TEMP_DIR", "/tmp/cats_dogs"))
 
 # Configuration du modèle
 MODEL_CONFIG = {
+    "version": "1.0.0",
     "image_size": (128, 128), # Optimized for speed-up
     "batch_size": 64,
     "epochs": 3, #10, # Optimized for speed-up

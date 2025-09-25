@@ -57,14 +57,36 @@
 {% block scripts %}
 <script>
 
-const feedback = (grade) =>{
-    alert(grade);
-    feedback_callback();
+const feedback  = async (grade) =>{
+    const uuid  = window.localStorage.getItem('catndog_uuid');
+    const token = window.localStorage.getItem('catndog_token');
+    if(!uuid){
+        console.log("Aucun identifiant de tâche trouvé pour le feedback.");
+        return;
+    }
+    
+    const response = await fetch('/api/feedback', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                uuid: uuid,
+                grade: grade
+        })
+    });
+    if (!response.ok) {
+        feedback_callback('Erreur lors de l\'envoi du feedback.');
+    } else {
+        feedback_callback('Feedback envoyé avec succès.');
+    }
+    
 }
 
-const feedback_callback = () =>{
+const feedback_callback = (msg) =>{
     const div_feedback = document.getElementById('feedback');
-    div_feedback.remove();
+    div_feedback.innerHTML = `<p><i>${msg}</i></p>`;
 }
 
 document.getElementById('imageFile').addEventListener('change', function(e) {
@@ -92,6 +114,7 @@ document.getElementById('predictionForm').addEventListener('submit', async funct
     
     const file = fileInput.files[0];
     const token = tokenInput.value;
+    window.localStorage.setItem('catndog_token', token);
     
     if (!file) {
         alert('Veuillez sélectionner une image');
@@ -120,28 +143,29 @@ document.getElementById('predictionForm').addEventListener('submit', async funct
             const isDog = data.prediction === 'Dog';
             const emoji = isDog ? '🐶' : '🐱';
             const bgColor = isDog ? 'bg-warning' : 'bg-success';
-            
+            window.localStorage.setItem('catndog_uuid', data.task_id);
             result.innerHTML = `
                 <div class="alert ${bgColor} result-card">
                     <h5>${emoji} Résultat de la prédiction</h5>
+                    <div>${data.task_id}</div>
                     <div class="row">
                         <div class="col-md-6">
                             <strong>Prédiction:</strong> ${data.prediction}<br>
-                            <strong>Confiance:</strong> ${data.confidence}<br>
+                            <strong>Confiance:</strong> ${data.confidence.toFixed(2)}%<br>
                             <strong>Fichier:</strong> ${data.filename}
                         </div>
                         <div class="col-md-6">
                             <strong>Probabilités détaillées:</strong><br>
-                            🐱 Chat: ${data.probabilities.cat}<br>
-                            🐶 Chien: ${data.probabilities.dog}
+                            🐱 Chat: ${data.probabilities.cat.toFixed(2)}%<br>
+                            🐶 Chien: ${data.probabilities.dog.toFixed(2)}%
                         </div>
                     </div>
                     <div id="feedback">
                         <p>Noter la réponse : 
-                            <button class="icon-button" onclick="feedback('like')">
+                            <button class="icon-button" onclick="feedback(1)">
                                 <img src="{{ url_for('assets', path='icons/like-button-icon.svg') }}"> 
                             </button>
-                            <button class="icon-button" onclick="feedback('dislike')">
+                            <button class="icon-button" onclick="feedback(-1)">
                                 <img src="{{ url_for('assets', path='icons/dislike-button-icon.svg') }}">
                             </button>
                         </p>

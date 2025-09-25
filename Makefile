@@ -11,7 +11,6 @@ env:
 activate:
 	@echo "Run: source $(VENV)/bin/activate"
 	
-
 clear :
 	rm -rf $(VENV)
 
