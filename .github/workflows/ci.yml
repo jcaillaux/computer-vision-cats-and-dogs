@@ -41,7 +41,7 @@ jobs:
       run: |
         python scripts/run_api.py &
         sleep 25
-        #python tests/test_api_simple.py
+        python tests/test_api_simple.py
         
     - name : Stop PostgreSQL
       run : |
