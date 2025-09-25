@@ -6,6 +6,8 @@ import requests
 import sys
 from pathlib import Path
 import time
+from dotenv import load_dotenv
+load_dotenv()
 
 # Ajouter le répertoire racine au path
 ROOT_DIR = Path(__file__).parent.parent
@@ -243,8 +245,147 @@ class TestAPIResponseFormat:
         assert "dog" in probs
         
         # Vérifier que les pourcentages sont bien formatés
-        assert probs["cat"].endswith("%")
-        assert probs["dog"].endswith("%")
+        assert isinstance(probs["cat"], float)
+        assert isinstance(probs["dog"], float)
+
+class TestFeedback:
+    """Tests de l'endpoint feedback"""
+    
+    def test_feedback_without_auth(self):
+        """Test de soumission de feedback sans authentification"""
+        feedback_data = {
+            "uuid": "test-uuid-123",
+            "grade": 5
+        }
+        
+        response = requests.post(
+            f"{BASE_URL}/api/feedback", 
+            json=feedback_data
+        )
+        
+        # Devrait retourner 401 ou 403 sans authentification
+        assert response.status_code in [401, 403]
+    
+    def test_feedback_with_wrong_token(self):
+        """Test avec un mauvais token"""
+        headers = {"Authorization": "Bearer MAUVAIS_TOKEN"}
+        feedback_data = {
+            "uuid": "test-uuid-123", 
+            "grade": 5
+        }
+        
+        response = requests.post(
+            f"{BASE_URL}/api/feedback",
+            json=feedback_data,
+            headers=headers
+        )
+        
+        assert response.status_code == 401
+    
+    def test_feedback_with_valid_token_and_data(self):
+        """Test avec token valide et données valides"""
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        feedback_data = {
+            "uuid": "test-uuid-123",
+            "grade": 5
+        }
+        
+        response = requests.post(
+            f"{BASE_URL}/api/feedback",
+            json=feedback_data,
+            headers=headers
+        )
+        
+        # Devrait réussir ou échouer selon si l'UUID existe en base
+        assert response.status_code in [200, 500]  # 500 si UUID n'existe pas
+        
+        if response.status_code == 200:
+            data = response.json()
+            assert "message" in data
+            assert data["message"] == "Feedback soumis avec succès"
+    
+    def test_feedback_missing_uuid(self):
+        """Test avec UUID manquant"""
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        feedback_data = {
+            "grade": 5
+            # UUID manquant
+        }
+        
+        response = requests.post(
+            f"{BASE_URL}/api/feedback",
+            json=feedback_data,
+            headers=headers
+        )
+        
+        assert response.status_code == 422  # Validation error
+    
+    def test_feedback_missing_grade(self):
+        """Test avec grade manquant"""
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        feedback_data = {
+            "uuid": "test-uuid-123"
+            # Grade manquant
+        }
+        
+        response = requests.post(
+            f"{BASE_URL}/api/feedback",
+            json=feedback_data,
+            headers=headers
+        )
+        
+        assert response.status_code == 422  # Validation error
+    
+    def test_feedback_invalid_grade_type(self):
+        """Test avec type de grade invalide"""
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        feedback_data = {
+            "uuid": "test-uuid-123",
+            "grade": "invalid"  # String au lieu d'int
+        }
+        
+        response = requests.post(
+            f"{BASE_URL}/api/feedback",
+            json=feedback_data,
+            headers=headers
+        )
+        
+        assert response.status_code == 422  # Validation error
+    
+    def test_feedback_empty_uuid(self):
+        """Test avec UUID vide"""
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        feedback_data = {
+            "uuid": "",
+            "grade": 5
+        }
+        
+        response = requests.post(
+            f"{BASE_URL}/api/feedback",
+            json=feedback_data,
+            headers=headers
+        )
+        
+        # Peut être 422 (validation) ou 500 (erreur base de données)
+        assert response.status_code in [422, 500]
+    
+    @pytest.mark.parametrize("grade", [1, 2, 3, 4, 5])
+    def test_feedback_different_grades(self, grade):
+        """Test paramétré avec différentes valeurs de grade"""
+        headers = {"Authorization": f"Bearer {TOKEN}"}
+        feedback_data = {
+            "uuid": f"test-uuid-grade-{grade}",
+            "grade": grade
+        }
+        
+        response = requests.post(
+            f"{BASE_URL}/api/feedback",
+            json=feedback_data,
+            headers=headers
+        )
+        
+        # Accepter 200 (succès) ou 500 (UUID n'existe pas)
+        assert response.status_code in [200, 500]
 
 # Tests paramétrés pour plusieurs endpoints
 @pytest.mark.parametrize("endpoint,expected_status", [
