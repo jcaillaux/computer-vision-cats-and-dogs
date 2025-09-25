@@ -25,7 +25,14 @@ jobs:
       run: |
         mkdir -p data/processed/models
         touch data/processed/models/cats_dogs_model.keras
-    
+    - name : Create Fake .env
+      run : |
+        cat > .env << EOF
+          POSTGRES_DBNM=catndogdb
+          POSTGRES_USER=myusername
+          POSTGRES_PASS=mycomplicatedpassword
+          POSTGRES_PORT=5433
+        EOF
     - name : Setup PostgreSQL
       run : |
         make up
