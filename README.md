@@ -132,3 +132,7 @@ TODO : Implémentation des tests pour le modèle de classification.
 ## 📄 Licence
 
 MIT - voir LICENSE pour plus de détails.
+
+## Conformité RGPD
+
+Une note concernant la conformité RGPD à été ajoutée à la page *info.html*. Une note plus compète est disponible dans la documentation.
