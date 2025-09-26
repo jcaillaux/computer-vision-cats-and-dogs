@@ -48,6 +48,7 @@ project-name/
 │   ├── dev.txt
 │   └── prod.txt
 ├── scripts/                 # Scripts d'automatisation/déploiement
+├── slides/                  # Slides Rséumant l'état actuel du projet
 ├── src/                     # Code source principal
 │   ├── api/                 # APIs et services web
 │   ├── data/                # Scripts de traitement des données
