@@ -41,6 +41,7 @@ project-name/
 │   └── external/            # Données externes/références
 ├── docker/                  # Dockerfiles et compose
 ├── docs/                    # Documentation
+├── graphana/                # Export des dashboard Grafana 
 ├── notebooks/               # Jupyter notebooks pour exploration
 ├── requirements/            # Dépendances par environnement
 │   ├── base.txt
@@ -62,16 +63,39 @@ project-name/
 └── pyproject.toml           # Configuration Python/packaging
 ```
 
-## 🛠️ Commandes utiles
+## 🛠️ Procédure d'installation
 
-*Section minimaliste à faire évoluer.*
+### Configuration des identifiants de connections
+
+L'ensemble des données de connections sont déclarés dans un fichier `.env` à  la racine du projet. La structure à suivre est :
+
+```bash
+# Database connection settings
+
+POSTGRES_DBNM=***
+POSTGRES_USER=***
+POSTGRES_PASS=***
+POSTGRES_PORT=***
+
+# Graphana connection settings
+GRAFANA_ADMIN_PASSWORD=***
+GRAFANA_PORT=***
+```
+
+Avant de procéder à toute étapes d'installation, *python@3.11+*, *docker* et l'utilitaire *make* doivent être installé. Toute les commandes nécessaires à la création de l'environement virtuel, au lancement de l'api et des services (Postgres, Grafana), création des tables SQL et tests automatisés sont décrites dans cette section.
 
 ```bash
 make env           # Installer les dépendances dans un environnement virtuel
-```
 
-```bash
-make up           # Initialisation des conteneurs Postgres et Grafana
+make up/down       # Lancement/arrêt des conteneurs docker pour la base Postgres et Grafana
+
+make test          # Lancement des tests automatisés
+
+make create-tables # Creation des tables dans la base Postgres
+
+make drop-tables   # Suppression des tables dans la base Postgres
+
+make start         # Lancement de l'API exposant le service de classification
 ```
 
 ## 🎯 API
