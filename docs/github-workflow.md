@@ -34,10 +34,6 @@ flowchart LR
 Nous introduisons une seconde branche : la branche **`staging`** (*staging branch*). Cette branche  est une branche d'intégration et de validation. C'est une branche d'intégration car elle nous sert à agréger tous les commits issus des `branches feature` – *branches créées pour le développement de nouvelles fonctionnalités (features)*. C'est aussi une branche de validation car nous éxécutons notre batterie de tests lors notre première étape de notre cycle `CI/CD`. Si tous les test sont passés avec succès alors cette branche sera mergée sur la branche `main`.  La branche `main` doit recevoir uniquement les commits de la branche `staging`.
 
 **Remarque : tout comme pour la branche *main*, on ne travail pas directement sur cette branche.** 
-<p align='center'>
-	<img src='./assets/friends-stagingarea.gif' alt='friends-staging-gif'/>
-</p>
-
 
 ### Les branches features
 
