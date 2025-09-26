@@ -122,6 +122,12 @@ python scripts/run_api.py
 
 ![Web APP](/docs/img/web.png "Application web du projet")
 
+## Couverture de tests
+
+Des tests automatisés pour tester les transaction avec la base de données ainsi que les points d'API ont été implémentés.
+
+TODO : Implémentation des tests pour le modèle de classification.
+
 ## 📄 Licence
 
 MIT - voir LICENSE pour plus de détails.
